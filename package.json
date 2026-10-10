@@ -1,0 +1,38 @@
+{
+  "name": "@moy-apps/agent-office",
+  "version": "0.1.0",
+  "description": "Adapter for Agent Office for Jira: hooks for Claude Code, Codex, Cursor, Rovo CLI and OpenClaw that report agent activity over the Agent Office Protocol (AOP v0).",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/moy-apps/agent-office-plugin",
+  "author": "MOY APPS",
+  "bin": {
+    "agent-office": "bin/agent-office.cjs"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "mappers/",
+    "openclaw/",
+    "plugin/",
+    "marketplace/",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test --disable-warning=ExperimentalWarning test/*.test.cjs",
+    "pack-plugin": "node bin/agent-office.cjs pack-plugin dist/plugin"
+  },
+  "dependencies": {},
+  "keywords": [
+    "jira",
+    "agent-office-protocol",
+    "claude-code",
+    "codex",
+    "cursor",
+    "hooks"
+  ]
+}

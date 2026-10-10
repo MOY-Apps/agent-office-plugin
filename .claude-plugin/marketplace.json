@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "agent-office",
+  "description": "Agent Office for Jira: your coding agents as characters in a live office inside Jira, linked to the work items they are on.",
+  "owner": {
+    "name": "MOY APPS"
+  },
+  "plugins": [
+    {
+      "name": "agent-office",
+      "source": "./",
+      "description": "Hooks for Claude Code that report session, turn and tool activity to Agent Office for Jira. Metadata only."
+    }
+  ]
+}

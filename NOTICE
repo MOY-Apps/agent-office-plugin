@@ -1,0 +1,92 @@
+@moy-apps/agent-office
+Copyright (c) 2026 MOY APPS
+
+This package is a derivative work of The Roving Office
+(https://github.com/atlassian-labs/roving-office),
+Copyright (c) 2026 Atlassian US., Inc., used under the Apache License,
+Version 2.0 (the "License"). A copy of the License is in LICENSE. The
+upstream commit the fork was taken from is f3c51c85d04c13ae32a4b929c7488847980c3851.
+
+This product includes software developed at Atlassian (https://www.atlassian.com/).
+
+
+WHAT WAS TAKEN
+--------------
+
+From the upstream repository, the Agent Office Protocol emitter and its
+installers, and nothing of the office itself (no renderer, no server, no
+artwork):
+
+  bin/aop-send.cjs             -> lib/send.cjs, bin/aop-send.cjs
+  bin/lib/aop-core.cjs         -> lib/aop-core.cjs
+  bin/lib/local-config.cjs     -> lib/local-config.cjs
+  bin/lib/cli-flags.cjs        -> lib/cli-flags.cjs
+  bin/aop-connect.cjs          -> lib/connect.cjs
+  bin/aop-claude-install.cjs   -> lib/install/claude.cjs
+  bin/aop-codex-install.cjs    -> lib/install/codex.cjs
+  bin/aop-cursor-install.cjs   -> lib/install/cursor.cjs
+  bin/aop-rovo-install.cjs     -> lib/install/rovo.cjs
+  bin/aop-openclaw-install.cjs -> lib/install/openclaw.cjs
+  bin/aop-node.sh              -> bin/aop-node.sh
+  bin/aop-plugin-hook.sh       -> bin/aop-plugin-hook.sh, plugin/bin/aop-plugin-hook.sh
+  bin/mappers/**               -> mappers/**            (verbatim but cursor.cjs, see 9)
+  hooks/hooks.json             -> plugin/hooks/hooks.json
+  .claude-plugin/plugin.json   -> plugin/.claude-plugin/plugin.json
+  .codex-plugin/plugin.json    -> plugin/.codex-plugin/plugin.json
+  plugins/claude/marketplace.json -> marketplace/marketplace.json
+  openclaw-plugin/**           -> openclaw/**
+
+
+WHAT WAS CHANGED
+----------------
+
+Per section 4(b) of the License, the files carry notices of modification in
+their headers; in summary:
+
+  1. Package and command renamed: `@moy-apps/agent-office`, bin `agent-office`.
+     Plugin and marketplace ids renamed to `agent-office`.
+  2. Config directory moved to `~/.agent-office/` (`AGENT_OFFICE_HOME` to
+     override). Endpoint resolution reads `AGENT_OFFICE_URL`/`AGENT_OFFICE_TOKEN`
+     first, then the upstream `AOP_URL`/`AOP_TOKEN`, then
+     `~/.agent-office/endpoint.json`, then the upstream
+     `~/.roving-office/endpoint.json`, so an existing setup keeps working.
+     Redaction and scene variables likewise read `AGENT_OFFICE_*` first and
+     `ROVING_OFFICE_*` as a fallback.
+  3. gzip removed from the transport entirely. Upstream gzips bodies over 4 KiB;
+     this receiver is an Atlassian Forge web trigger, which does not deliver a
+     gzipped body intact. Bodies are sent as plain bytes and an NDJSON batch is
+     cut into several POSTs under 200 KB (`splitBatches`, `post`).
+  4. `connect` no longer mints an office: the receiver lives inside Jira and its
+     token is minted there. It stores the URL and token, keeps the web trigger's
+     path instead of cutting the URL to its origin, and proves the pair by sending
+     one `session.start` labelled `onboarding`.
+  5. The Claude Code installer defaults to settings.json hooks that name this
+     package (an npm install path is stable); the plugin route stages a local
+     marketplace under `~/.agent-office/` from a packed copy of the plugin
+     (`lib/pack.cjs`). The Codex installer stages the same packed plugin.
+  6. The hook entry is reachable as `agent-office send <harness>` as well as
+     `bin/aop-send.cjs`; the plugin hook script serves both the packed layout
+     and a source checkout.
+  7. User-facing strings name Agent Office for Jira. Log prefixes in the OpenClaw
+     plugin changed accordingly.
+  8. Tests rewritten for this package (test/).
+  9. The Cursor mapper no longer declares the `session.end` capability (Cursor's
+     `sessionEnd` hook does not reliably run when a chat is closed), and maps
+     Cursor's `aborted`, `window_close` and `user_close` end reasons.
+ 10. Every envelope carries `session.actor`: `AGENT_OFFICE_ACTOR`, else `actor`
+     in endpoint.json (`connect --name`), else the OS user's full name or login.
+
+
+BRAND MARKS
+-----------
+
+No brand asset of The Roving Office, Atlassian, Anthropic, OpenAI, Anysphere or
+the OpenClaw Foundation is included in this package. "The Roving Office" is
+named here only to identify the origin of the code, as the License requires.
+Product names used in this package's interface and documentation -- Jira,
+Claude Code, Codex, Cursor, Rovo CLI, OpenClaw -- identify those products and
+nothing more. This package is not affiliated with, endorsed by, or sponsored by
+Atlassian, Anthropic, OpenAI, Anysphere or the OpenClaw Foundation.
+
+The wire protocol (AOP v0) and the `X-Roving-Office-Token` header are the
+upstream protocol's and are kept unchanged so receivers that speak it interoperate.

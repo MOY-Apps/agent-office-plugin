@@ -1,0 +1,31 @@
+{
+  "name": "agent-office",
+  "version": "0.1.0",
+  "description": "Shows Codex sessions as characters in the Agent Office inside Jira.",
+  "author": {
+    "name": "MOY APPS"
+  },
+  "homepage": "https://github.com/moy-apps/agent-office-plugin",
+  "repository": "https://github.com/moy-apps/agent-office-plugin",
+  "keywords": [
+    "jira",
+    "observability",
+    "hooks",
+    "agent-office-protocol"
+  ],
+  "interface": {
+    "displayName": "Agent Office for Jira",
+    "shortDescription": "See Codex sessions work in a live office inside Jira.",
+    "longDescription": "A zero-context hook integration that turns Codex lifecycle, tool, plan, permission, compaction and subagent events into live characters in Agent Office for Jira, linked to work items by branch name.",
+    "developerName": "MOY APPS",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Observability"
+    ],
+    "defaultPrompt": [
+      "Check whether the Agent Office adapter is connected."
+    ],
+    "websiteURL": "https://github.com/moy-apps/agent-office-plugin",
+    "brandColor": "#0D4A42"
+  }
+}

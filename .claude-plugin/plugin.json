@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "agent-office",
+  "version": "0.1.0",
+  "description": "Shows your Claude Code sessions as characters in the Agent Office inside Jira, linked to the work items they are about. Hooks only: no context, no prompts stored.",
+  "author": {
+    "name": "MOY APPS"
+  },
+  "homepage": "https://github.com/moy-apps/agent-office-plugin",
+  "keywords": [
+    "jira",
+    "observability",
+    "hooks",
+    "agent-office-protocol"
+  ]
+}
